@@ -11,12 +11,12 @@ public class SingSongService extends Service {
 
     @Override
     public void onCreate() {
-        try {
-            System.out.println("Inside onCreate");
-            singQueen();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Toast.makeText(this, "This is unbound so if you exit the app, the service continues to run.\n", Toast.LENGTH_LONG).show();
+//            singQueen();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -25,6 +25,7 @@ public class SingSongService extends Service {
 //        throw new UnsupportedOperationException("Not yet implemented");
         System.out.println("Inside Bind");
         try {
+            Toast.makeText(this, "This is bound so if you exit the app, the service stops.\n", Toast.LENGTH_LONG).show();
             singQueen();
         } catch (InterruptedException e) {
             e.printStackTrace();
