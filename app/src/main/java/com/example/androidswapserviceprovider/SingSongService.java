@@ -19,6 +19,7 @@ public class SingSongService extends Service {
 //        }
     }
 
+
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
@@ -41,4 +42,5 @@ public class SingSongService extends Service {
         Toast.makeText(this, "We will, we will rock you\n", Toast.LENGTH_LONG).show();
         Toast.makeText(this, "We will, we will rock you\n", Toast.LENGTH_LONG).show();
     }
+
 }
