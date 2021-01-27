@@ -1,5 +1,6 @@
 package com.example.androidswapserviceprovider;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
@@ -10,10 +11,13 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +26,17 @@ public class MainActivity extends AppCompatActivity {
     Button unboundServiceBtn;
     Button boundServiceBtn;
     Button sendBroadcastBtn;
+    Button bgThreadBtn;
+    Button fgThreadBtn;
+    ProgressBar pBar;
+    Handler threadHandler1;
+    Handler threadHandler2 = new Handler();
+    private Runnable foregroundTask = new Runnable() {
+        @Override
+        public void run() {
+            pBar.incrementProgressBy(1);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +46,38 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter brFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         brFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         this.registerReceiver(br, brFilter);
+
+        pBar = (ProgressBar) findViewById(R.id.p_bar);
+        pBar.setMax(100);
+
+        threadHandler1 = new Handler() {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                Log.d("LOG_TAG", "handleMessage in threadHandler1 with msg: " + msg.obj);
+                Toast.makeText(MainActivity.this,"handling the message in threadHandler1 with msg: " + msg.obj, Toast.LENGTH_LONG).show();
+            }
+        };
+
+        //
+        bgThreadBtn = (Button) findViewById(R.id.bg_thread_btn);
+        bgThreadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Message msg = threadHandler1.obtainMessage(1); // obtain a free token from handle and update it message
+                        msg.obj = "Hello from thread";
+                        threadHandler1.sendMessage(msg); // sends the message
+//                        bgThreadBtn.setText("This is now handled"); // throws an error
+//                        Toast.makeText(MainActivity.this,"This is BG thread", Toast.LENGTH_LONG).show();
+                    }
+                });
+                thread.start();
+            }
+        });
+
 
 
 

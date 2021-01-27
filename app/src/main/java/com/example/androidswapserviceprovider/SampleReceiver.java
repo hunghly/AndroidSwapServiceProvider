@@ -16,9 +16,9 @@ public class SampleReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
-        System.out.println("Intent Received");
-        Toast.makeText(context,"intent received:",Toast.LENGTH_LONG).show();
-        Intent singSong = new Intent(context, SingSongService.class);
-        context.startService(singSong);
+        System.out.println("Intent Received!!");
+//        Toast.makeText(context,"intent received:",Toast.LENGTH_LONG).show();
+//        Intent singSong = new Intent(context, SingSongService.class);
+//        context.startService(singSong);
     }
 }
