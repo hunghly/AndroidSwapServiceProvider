@@ -34,7 +34,15 @@ public class MainActivity extends AppCompatActivity {
     private Runnable foregroundTask = new Runnable() {
         @Override
         public void run() {
-            pBar.incrementProgressBy(1);
+            if (pBar.getProgress() == pBar.getMax()) {
+                Log.d("LOG_TAG", "You reached the max!");
+                Toast.makeText(MainActivity.this,"You reached the max!", Toast.LENGTH_LONG).show();
+                fgThreadBtn.setText("Max reached!"); // in this case, since it was created by main activity, it can change the UI
+            } else {
+                Log.d("LOG_TAG", "Incrementing progress bar by 1");
+                Toast.makeText(MainActivity.this,"Incrementing progress bar by 1", Toast.LENGTH_LONG).show();
+                pBar.incrementProgressBy(1);
+            }
         }
     };
 
@@ -48,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(br, brFilter);
 
         pBar = (ProgressBar) findViewById(R.id.p_bar);
-        pBar.setMax(100);
+        pBar.setMax(10);
 
         threadHandler1 = new Handler() {
             @Override
@@ -59,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        //
+        // bg thread
         bgThreadBtn = (Button) findViewById(R.id.bg_thread_btn);
         bgThreadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +86,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        fgThreadBtn = (Button) findViewById(R.id.fg_thread_btn);
 
+        fgThreadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                threadHandler2.post(foregroundTask);
+            }
+        });
 
 
         // used for swapping to screen two
